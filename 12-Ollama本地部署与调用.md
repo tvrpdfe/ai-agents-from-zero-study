@@ -224,7 +224,7 @@ D:\devSoft\Ollama\models
 
 然后再通过环境变量或图形设置告诉 Ollama：以后模型存这里。
 
-<img src="images/12/12-2-4-1.gif" style="zoom:50%;" alt="Windows 安装向导中自定义 Ollama 程序安装路径的操作步骤（动图）"/>
+<img src="images/12/12-2-4-1.gif" alt="Windows 安装向导中自定义 Ollama 程序安装路径的操作步骤（动图）"/>
 
 ### 2.5 修改模型存储目录
 
@@ -239,7 +239,7 @@ D:\devSoft\Ollama\models
 OLLAMA_MODELS=D:\devSoft\Ollama\models
 ```
 
-<img src="images/12/12-2-5-1.jpeg" style="zoom:50%;" alt="Windows「环境变量」对话框中新建用户变量 OLLAMA_MODELS 并指向自定义 models 目录"/>
+<img src="images/12/12-2-5-1.jpeg" alt="Windows「环境变量」对话框中新建用户变量 OLLAMA_MODELS 并指向自定义 models 目录"/>
 
 根据 Ollama 官方 FAQ，默认模型目录通常是：
 
@@ -261,7 +261,7 @@ OLLAMA_MODELS=D:\devSoft\Ollama\models
 
 如果你之前已经在其他目录下载过模型，可以直接把已有模型目录迁移过去，避免重复下载。
 
-<img src="images/12/12-2-6-1.jpeg" style="zoom:50%;" alt="将已有 blobs、manifests 等模型目录内容复制到 OLLAMA_MODELS 指定路径以复用下载"/>
+<img src="images/12/12-2-6-1.jpeg" alt="将已有 blobs、manifests 等模型目录内容复制到 OLLAMA_MODELS 指定路径以复用下载"/>
 
 这在实际开发里非常有用，比如：
 
@@ -273,9 +273,9 @@ OLLAMA_MODELS=D:\devSoft\Ollama\models
 
 部分 Ollama 桌面应用版本支持通过设置界面修改模型存储位置。如果你使用的是桌面客户端，可以在设置中查看是否存在 **Model location** 或类似选项。
 
-<img src="images/12/12-2-7-1.png" style="zoom:50%;" alt="Ollama 桌面客户端菜单中打开 Settings（设置）的入口位置"/>
+<img src="images/12/12-2-7-1.png" alt="Ollama 桌面客户端菜单中打开 Settings（设置）的入口位置"/>
 
-<img src="images/12/12-2-7-2.png" style="zoom:40%;" alt="在 Settings 中将 Model location 改为课程资料或自定义的 models 文件夹"/>
+<img src="images/12/12-2-7-2.png" alt="在 Settings 中将 Model location 改为课程资料或自定义的 models 文件夹"/>
 
 改完后，建议：
 

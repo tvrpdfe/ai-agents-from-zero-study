@@ -41,7 +41,7 @@
 - LangChain 短期记忆文档：https://docs.langchain.com/oss/python/langchain/short-term-memory
 - LangGraph 持久化 / Memory 主线：https://docs.langchain.com/oss/python/langgraph/add-memory
 
-<img src="images/16/16-1-1-2.jpeg" style="zoom:65%;" alt="LangChain 官方文档「Core components → Short-term memory」概述：记忆用于保存先前交互信息，支撑智能体在多轮交互中保持效率与体验" />
+<img src="images/16/16-1-1-2.jpeg" alt="LangChain 官方文档「Core components → Short-term memory」概述：记忆用于保存先前交互信息，支撑智能体在多轮交互中保持效率与体验" />
 
 ### 1.2 定义
 
@@ -545,7 +545,7 @@ LRANGE message_store:user-001 0 -1
 - 让你确认 Redis Stack 也能兼容跑本章历史存储
 - 让你能用 RedisInsight 直观看到会话数据
 
-<img src="images/16/16-5-2-7-1.png" style="zoom:50%;" alt="RedisInsight 中查看 LangChain 写入的会话：键 message_store:user-001 类型为 LIST，元素为序列化后的 human/ai 消息（JSON），便于对照代码理解持久化结构" />
+<img src="images/16/16-5-2-7-1.png" alt="RedisInsight 中查看 LangChain 写入的会话：键 message_store:user-001 类型为 LIST，元素为序列化后的 human/ai 消息（JSON），便于对照代码理解持久化结构" />
 
 所以这节更适合看作：**主案例的一个更方便观察数据的变体。**
 
