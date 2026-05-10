@@ -94,6 +94,8 @@
 
 **Docker 是唯一前置依赖**，用于创建隔离运行环境：
 
+如果你对镜像、容器、Compose、volume、端口映射这些概念还不熟，可以先看 [第 8.1 章 Docker 入门与 Dify 部署排障](8.1-Docker入门与Dify部署常见问题.md)。本章只保留 Coze 部署所需步骤，不再重复展开 Docker 基础。
+
 #### ① 下载安装包
 
 - Docker 官网下载地址：https://www.docker.com/products/docker-desktop/
@@ -125,49 +127,7 @@
 
 ![Docker Desktop 中配置镜像加速器的界面](images/6/6-2-1-7.png)
 
-```bash
-"registry-mirrors": [
-"https://registry.docker-cn.com",
-"https://s4uv0fem.mirror.aliyuncs.com",
-"https://docker.1ms.run",
-"https://registry.dockermirror.com",
-"https://docker.m.daocloud.io",
-"https://docker.kubesre.xyz",
-"https://docker.mirrors.ustc.edu.cn",
-"https://docker.1panel.live",
-"https://docker.kejilion.pro",
-"https://dockercf.jsdelivr.fyi",
-"https://docker.jsdelivr.fyi",
-"https://dockertest.jsdelivr.fyi",
-"https://hub.littlediary.cn",
-"https://proxy.1panel.live",
-"https://docker.1panelproxy.com",
-"https://image.cloudlayer.icu",
-"https://docker.1panel.top",
-"https://docker.anye.in",
-"https://docker-0.unsee.tech",
-"https://hub.rat.dev",
-"https://hub3.nat.tf",
-"https://docker.1ms.run",
-"https://func.ink",
-"https://a.ussh.net",
-"https://docker.hlmirror.com",
-"https://lispy.org",
-"https://docker.yomansunter.com",
-"https://docker.xuanyuan.me",
-"https://docker.mybacc.com",
-"https://dytt.online",
-"https://docker.xiaogenban1993.com",
-"https://dockerpull.cn",
-"https://docker.zhai.cm",
-"https://dockerhub.websoft9.com",
-"https://dockerpull.pw",
-"https://docker-mirror.aigc2d.com",
-"https://docker.sunzishaokao.com",
-"https://docker.melikeme.cn"
-]
-
-```
+通用排查思路见：[第 8.1 章 - 网络慢或镜像拉取失败](8.1-Docker入门与Dify部署常见问题.md#_12、网络慢或镜像拉取失败)。
 
 ##### 方式 2：配置 Docker 代理
 
@@ -376,12 +336,7 @@ docker compose --profile '*' up -d
 
 ![在 Docker 中启动 Coze Studio 的命令行界面](images/6/6-2-2-26.png)
 
-> 这个命令的含义是：
->
-> - `docker compose`：使用 Docker Compose 运行服务
-> - `--profile '*'`：启用所有 profile 配置
-> - `up`：启动服务（若容器不存在则创建并启动，若已存在则启动）
-> - `-d`：detached 模式，即在后台运行
+> 这条命令的核心是：在 Coze 的 `docker` 目录中，通过 Compose 启用所有 profile 并后台启动服务。`docker compose up -d` 的通用含义见 [第 8.1 章](8.1-Docker入门与Dify部署常见问题.md#_3、compose-到底做了什么)。
 
 出现下图表示成功：
 

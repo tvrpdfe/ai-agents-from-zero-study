@@ -10,7 +10,7 @@
 - 在 Windows 上完成 Docker Desktop 安装，并知道首次安装时为什么常会遇到 WSL 相关提示。
 - 获取 Dify 项目，进入 `docker` 目录，复制 `.env.example` 为 `.env` 并完成最小配置。
 
-**学习建议：** 先完成第 1 节 Docker 安装并重启（必要时安装 WSL），再用第 2 节：获取 Dify → 进入 docker 目录 → 复制并修改 .env（端口冲突时必改）→ 执行 `docker compose up -d`。首次拉镜像可能较慢，报错可重试。
+**学习建议：** 先完成第 1 节 Docker 安装并重启（必要时安装 WSL），再用第 2 节：获取 Dify → 进入 docker 目录 → 复制并修改 .env（端口冲突时必改）→ 执行 `docker compose up -d`。如果你不熟悉镜像、容器、Compose、volume、端口映射，先看 [第 8.1 章 Docker 入门与 Dify 部署排障](8.1-Docker入门与Dify部署常见问题.md)。
 
 **官方文档与资源**：详见 [工具导航与参考资料索引 - 低代码与智能体平台](工具导航与参考资料索引.md#低代码与智能体平台)。
 
@@ -33,6 +33,8 @@ Windows 本地部署 Dify，核心依赖只有两个：
 - 向量数据库等
 
 部署主线可以直接概括成一句话：**安装 Docker Desktop -> 获取 Dify 项目 -> 配置 `.env` -> `docker compose up -d` -> 浏览器访问。**
+
+本章只讲 Dify 的最小部署流程。Docker 通用概念、常用命令，以及部署后的排障、升级、数据库连接统一放在 [第 8.1 章 Docker 入门与 Dify 部署排障](8.1-Docker入门与Dify部署常见问题.md)。
 
 ## 2、Docker Desktop 安装
 
@@ -141,7 +143,7 @@ https://docs.dify.ai/zh-hans/getting-started/install-self-hosted/docker-compose
 
 如果本机 `80` 端口被其他程序占用了，就改成 `8100`、`8080` 或其他未被占用端口。
 
-> 可以这样理解：`.env` 像这套部署环境的“总开关配置文件”。第 7 章会频繁用到它，第 8.1 章会进一步解释它和 Compose、容器、数据卷之间的关系。
+> 可以这样理解：`.env` 像这套部署环境的“总开关配置文件”。Docker / Compose / 数据卷的通用关系和 Dify 场景排障见 [第 8.1 章](8.1-Docker入门与Dify部署常见问题.md)。
 
 ## 4、启动 Dify
 
@@ -223,4 +225,4 @@ docker compose up -d
 - **课程位置**：这章的意义不只是把 Dify 跑起来，更是帮你为后面的私有化、企业部署和 Docker 排障打基础。
 - 从掌握结果看，学完本章后，你至少应该：能在 Windows 上正确安装 Docker Desktop，并知道 WSL 提示出现时该怎么处理；能完成 Dify 的最小本地部署：获取代码、修改 `.env`、执行 `docker compose up -d`、浏览器访问；能理解端口冲突、镜像拉取失败、容器状态异常这些常见部署问题的大致排查方向。
 
-**建议下一步：** 如果你接下来要继续排 Docker 相关问题，直接看 [8.1-Docker 入门与 Dify 部署常见问题](8.1-Docker入门与Dify部署常见问题.md)；如果你要走更完整的企业部署链路，则进入 [第 8 章 企业级大模型部署](8-企业级大模型部署.md)。
+**建议下一步：** 如果你想补 Docker 基础，或者要排 Dify 部署、升级、数据库连接相关问题，看 [第 8.1 章 Docker 入门与 Dify 部署排障](8.1-Docker入门与Dify部署常见问题.md)；如果你要走更完整的企业部署链路，则进入 [第 8 章 企业级大模型部署](8-企业级大模型部署.md)。
