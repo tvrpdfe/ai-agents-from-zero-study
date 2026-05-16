@@ -88,7 +88,7 @@
 
 ## 2、完善 prompts.yml 中的网络助手配置
 
-项目对应文件：`deepsearch-agents/app/prompt/prompts.yml`
+项目对应文件路径：`deepsearch-agents/app/prompt/prompts.yml`
 
 在第 9 章，我们已经把提示词放进 YAML 文件统一管理。现在先补全网络搜索助手的配置。
 
@@ -118,7 +118,7 @@ sub_agents:
 
 ### 3.1 .env 中加入 Tavily Key
 
-项目对应文件：`deepsearch-agents/.env`
+项目对应文件路径：`deepsearch-agents/.env`
 
 添加 Tavily 配置：
 
@@ -145,7 +145,7 @@ Tavily 是面向大模型使用的搜索 API，它返回的结果通常已经整
 
 ## 4、实现并验证 internet_search 工具
 
-项目对应文件：`deepsearch-agents/app/tools/tavily_tool.py`
+项目对应文件路径：`deepsearch-agents/app/tools/tavily_tool.py`
 
 完整工具可以先按五段理解：
 
@@ -443,7 +443,7 @@ Agent 调用 internet_search
 
 工具写完以后，就可以把它和提示词配置组装成子智能体。
 
-项目对应文件：`deepsearch-agents/app/agent/subagents/network_search_agent.py`
+项目对应文件路径：`deepsearch-agents/app/agent/subagents/network_search_agent.py`
 
 这个文件只做一件事：把 YAML 里的网络助手配置和 `internet_search` 工具组装成 DeepAgents 认识的字典。
 

@@ -854,7 +854,7 @@ log_format = (
 
 #### 3.4.4 request_id 注入机制
 
-项目文件路径：`shopkeeper-agent/app/core/context.py`
+项目对应文件路径：`shopkeeper-agent/app/core/context.py`
 
 ```python
 from contextvars import ContextVar

@@ -526,7 +526,7 @@ wrap_tool_call = 包住一次工具调用
 
 ### 6.2 最小示例
 
-项目对应文件：`deepsearch-agents/examples/14-custom-tool-call-middleware.py`
+项目对应文件路径：`deepsearch-agents/examples/14-custom-tool-call-middleware.py`
 
 ```python
 from langchain.agents.middleware import wrap_tool_call

@@ -116,7 +116,7 @@ shopkeeper-agent/
 
 ### 2.1 定义请求体 QuerySchema
 
-项目对应文件：`shopkeeper-agent/app/api/schemas/query_schema.py`
+项目对应文件路径：`shopkeeper-agent/app/api/schemas/query_schema.py`
 
 ```python
 from pydantic import BaseModel
@@ -146,7 +146,7 @@ class QuerySchema(BaseModel):
 
 ### 2.2 创建查询路由 query_router
 
-项目对应文件：`shopkeeper-agent/app/api/routers/query_router.py`
+项目对应文件路径：`shopkeeper-agent/app/api/routers/query_router.py`
 
 本章先用 `fake_streamer()` 模拟流式输出，不接入真实问数智能体：
 
@@ -188,7 +188,7 @@ async def query_handler(query: QuerySchema):
 
 ### 2.3 在 main.py 中挂载路由
 
-项目对应文件：`shopkeeper-agent/main.py`
+项目对应文件路径：`shopkeeper-agent/main.py`
 
 ```python
 from fastapi import FastAPI

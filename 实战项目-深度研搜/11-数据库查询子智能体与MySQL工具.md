@@ -118,7 +118,7 @@ North China
 
 ## 3、配置 prompts.yml 中的数据库助手
 
-项目对应文件：`deepsearch-agents/app/prompt/prompts.yml`
+项目对应文件路径：`deepsearch-agents/app/prompt/prompts.yml`
 
 数据库助手配置可以这样写：
 
@@ -167,7 +167,7 @@ sub_agents:
 | `inventory`     | 药品库存和批次信息     |
 | `sales_records` | 药品销售记录和区域信息 |
 
-对应的初始化 SQL 放在：`deepsearch-agents/docs/mysql/mysql.sql`
+对应的初始化 SQL 放在：`deepsearch-agents/docker/mysql/mysql.sql`
 
 这个脚本会创建 `deepsearch_db`，并写入一批教学模拟数据：
 
@@ -202,7 +202,7 @@ flowchart LR
 
 ### 4.2 .env 中加入 MySQL 配置
 
-项目对应文件：`deepsearch-agents/.env`
+项目对应文件路径：`deepsearch-agents/.env`
 
 添加数据库配置：
 
@@ -223,11 +223,9 @@ MYSQL_SQL_MODE=TRADITIONAL
 
 ### 4.3 使用 Docker 启动 MySQL
 
-项目里已经准备了 Docker Compose 文件：
+如果你对 Docker、Compose、端口映射或数据卷还不熟，可以先回看 [第 8 章 Docker 入门与 Dify 部署常见问题](../8-Docker入门与Dify部署常见问题.md)，再继续执行下面的启动命令。
 
-```text
-deepsearch-agents/docs/docker-compose.yaml
-```
+项目里已经准备了 Docker Compose 文件：`deepsearch-agents/docker/docker-compose.yaml`
 
 内容核心如下：
 
@@ -316,7 +314,7 @@ docker compose --env-file .env -f docs/docker-compose.yaml up -d
 
 ## 5、实现数据库工具
 
-项目对应文件：`deepsearch-agents/app/tools/db_tools.py`
+项目对应文件路径：`deepsearch-agents/app/tools/db_tools.py`
 
 这一节集中完成 4 件事：
 
@@ -816,7 +814,7 @@ execute_sql_query
 
 ## 7、组装 database_query_agent
 
-项目对应文件：`deepsearch-agents/app/agent/subagents/database_query_agent.py`
+项目对应文件路径：`deepsearch-agents/app/agent/subagents/database_query_agent.py`
 
 代码如下：
 
