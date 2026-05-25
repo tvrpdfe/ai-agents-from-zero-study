@@ -365,6 +365,20 @@ monitor.report_tool(
 任务执行完成
 ```
 
+本项目里会同时遇到两类“流”：
+
+```mermaid
+flowchart TD
+    Agent["DeepAgent 执行中"] --> Stream["stream/astream：给后端代码解析 chunk"]
+    Agent --> Monitor["monitor.report_tool：主动上报业务事件"]
+    Stream --> Parser["解析 model/tools/task_result"]
+    Parser --> WS["WebSocket 推送给前端"]
+    Monitor --> WS
+    WS --> FE["前端进度面板"]
+```
+
+`stream/astream` 更偏框架运行状态，适合后端判断模型、工具和子智能体调用；`monitor` 更偏业务展示事件，适合把“正在搜索什么”这种人能看懂的消息推给前端。两者配合起来，页面既能看到 Agent 的真实执行过程，也能看到更友好的业务说明。
+
 这个项目里，向前端推送进度大体有两种做法。
 
 **方式一：在 stream 流式输出里统一解析**

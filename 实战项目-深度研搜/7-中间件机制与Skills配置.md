@@ -48,6 +48,8 @@ Agent -> 中间件 -> 子智能体
 | 最终回复生成前后     | 统一格式、收尾处理                     | 只做提示     |
 | 子智能体自己的链路中 | 单独设置限制、日志或权限规则           | 讲配置方式   |
 
+![Agent 中间件可以在上下文、模型、工具和子智能体链路中充当检查口，负责摘要、限流、日志、权限和异常治理](images/7/7-1-2-1.svg)
+
 本章重点放在模型调用限制和工具调用中间件上，因为它们最容易观察，也最常用于控制成本、记录日志和治理工具执行链路。
 
 ### 1.3 常见能力
@@ -735,6 +737,19 @@ result:content='300' name='add_numbers' tool_call_id='call_...'
 
 `interrupt_on` 更像“危险动作审批”。`middleware` 更像“执行链路治理”。
 
+```mermaid
+flowchart LR
+    A["Agent 准备调用工具"] --> B{是否是高风险工具}
+    B -- 是 --> C["interrupt_on：暂停并等待人工决策"]
+    B -- 否 --> D["middleware：日志、限流、脱敏、重试"]
+    C --> E{人工决策}
+    E -- approve --> D
+    E -- reject --> F["终止或返回拒绝信息"]
+    E -- edit --> G["修改参数后继续"]
+    G --> D
+    D --> H["执行工具或继续链路"]
+```
+
 ### 7.2 组合配置示例
 
 在教学示例里，`create_deep_agent` 同时配置了 `checkpointer`、`middleware` 和 `interrupt_on`。
@@ -861,7 +876,7 @@ WebSocket 层负责把事件发给前端；中间件负责在 Agent 执行链路
 
 前面几章已经讲过工具、子智能体、Backend 和中间件。DeepAgents 里还有一个常用扩展能力：`skills`。
 
-这里不再展开 Skill 的完整概念，完整基础知识放到 [第 27 章 Agent Skills 智能体技能与 AI 编程工具实践](../27-Agent%20Skills智能体技能与AI编程工具实践.md)。本节只解决一个工程问题：**在 DeepAgents 中，怎么把 Skill 目录挂到 Agent 上。**
+这里不再展开 Skill 的完整概念，完整基础知识放到 [第 27 章 Agent Skills 智能体技能与 AI 编程工具实践](../27-Skills技能与AI编程工具实践.md)。本节只解决一个工程问题：**在 DeepAgents 中，怎么把 Skill 目录挂到 Agent 上。**
 
 ### 9.1 FilesystemBackend 的作用
 

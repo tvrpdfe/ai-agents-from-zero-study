@@ -544,7 +544,20 @@ LangChainPendingDeprecationWarning: The default value of `allowed_objects` will 
 | 子任务核心是工具选择         | LangChain Agent                      |
 | 子任务只是简单提示词和工具   | 字典式子智能体                       |
 
-如果放到「深度研搜」项目里，可以这样分工：
+```mermaid
+flowchart TD
+    Start[要接入一个子能力] --> Simple{只是简单提示词和少量工具吗}
+    Simple -- 是 --> Dict[字典式子智能体]
+    Simple -- 否 --> Existing{已经有可运行能力吗}
+    Existing -- 是 --> Runnable[CompiledSubAgent 包装]
+    Existing -- 否 --> Build{任务是否有固定多步骤流程}
+    Build -- 是 --> Graph[先做成 LangGraph 子图]
+    Build -- 否 --> Agent[做成 LangChain Agent 或普通 Runnable]
+    Graph --> Runnable
+    Agent --> Runnable
+```
+
+放到「深度研搜」项目里，可以这样分工：
 
 ```text
 DeepAgents：总调度，决定下一步交给谁

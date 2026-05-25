@@ -971,6 +971,8 @@ GET /api/download?path=.../机器人信息.pdf
 
 这里的“最小”不是功能很少，而是**只保留一条最关键、最必要的主链路**：用户提出研究任务，系统判断需要哪些信息来源，再把不同任务分派给对应助手，最后汇总答案并生成 Markdown 或 PDF 文件。整个过程既能在前端看到实时进度，也能在后端通过 `thread_id`、`session_dir` 和日志追踪到当前任务。
 
+![深度研搜完整闭环：前端通过 HTTP 启动任务、通过 WebSocket 查看进度，后台主智能体调度子智能体和文件工具，最终返回回答、Markdown、PDF 和下载入口](images/14/14-summary-1.svg)
+
 从实际代码看，这条主线最终落在 `app/agent/main_agent.py`：主智能体通过 `create_deep_agent()` 组装模型、主提示词、三个文件工具、三个专家子智能体和 `InMemorySaver` 检查点；`run_deep_agent()` 则负责创建会话目录、复制上传文件、写入 `ContextVar`、调用 `main_agent.astream()`，并把子智能体调用、工具调用、最终结果和异常通过 `monitor` 推给前端。
 
 ### 1、这个项目最终完成了什么

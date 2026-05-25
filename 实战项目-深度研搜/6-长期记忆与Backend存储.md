@@ -601,6 +601,20 @@ agent = create_deep_agent(
 
 使用时只要记住：路径前缀用于路由，真正存储时 Backend 会处理映射。从 Agent 的虚拟文件系统视角看，仍然可以按 `/store/...` 这样的路径理解；但进入底层 Store 后，实际 key 可能已经去掉了路由前缀。
 
+```mermaid
+flowchart LR
+    Agent["Agent 文件工具：write_file/read_file"]
+    Router["CompositeBackend：按路径前缀分流"]
+    FS["FilesystemBackend：本地工作目录"]
+    Store["StoreBackend：KV Store"]
+    Local["local.txt：普通文件"]
+    Memory["/store/memory.txt：重要记忆"]
+
+    Agent --> Router
+    Router -- 普通路径 --> FS --> Local
+    Router -- /store/ 前缀 --> Store --> Memory
+```
+
 示例最后通过 `store.search(("filesystem",))` 打印 Store 内容，确认 `/store/` 路径下的重要记忆确实进入了 Store：
 
 ```python

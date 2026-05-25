@@ -1,0 +1,57 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1120" height="680" viewBox="0 0 1120 680" role="img" aria-labelledby="title desc">
+  <title id="title">深度研搜一主三从与工具体系</title>
+  <desc id="desc">主智能体负责任务规划、助手调度、文件交付和最终汇总，三个专家助手分别负责网络搜索、数据库查询和 RAGFlow 知识库查询。</desc>
+  <defs>
+    <marker id="arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+      <path d="M 0 0 L 10 5 L 0 10 z" fill="#334155"/>
+    </marker>
+    <style>
+      text { font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "PingFang SC", "Microsoft YaHei", Arial, sans-serif; fill: #172033; }
+      .title { font-size: 30px; font-weight: 700; }
+      .subtitle { font-size: 16px; fill: #5f6f82; }
+      .label { font-size: 18px; font-weight: 700; }
+      .body { font-size: 14px; fill: #4d5f73; }
+      .small { font-size: 13px; fill: #64748b; }
+      .box { rx: 12; ry: 12; stroke-width: 2; }
+      .line { stroke: #334155; stroke-width: 2.2; fill: none; marker-end: url(#arrow); }
+    </style>
+  </defs>
+
+  <rect width="1120" height="680" fill="#f7f8fb"/>
+  <text x="56" y="62" class="title">深度研搜的核心地图：一主三从，九个工具</text>
+  <text x="56" y="94" class="subtitle">主智能体像项目负责人，三个专家助手负责取回不同来源的信息，文件工具负责最终交付。</text>
+
+  <rect x="398" y="128" width="324" height="110" class="box" fill="#e9f7f2" stroke="#2d9d78"/>
+  <text x="454" y="174" class="label">DeepAgents 主智能体</text>
+  <text x="438" y="204" class="body">规划任务、选择信息源、汇总答案、生成交付文件</text>
+
+  <rect x="76" y="324" width="260" height="164" class="box" fill="#eef2ff" stroke="#6070d6"/>
+  <text x="118" y="364" class="label">网络搜索助手</text>
+  <text x="118" y="396" class="body">工具：internet_search</text>
+  <text x="118" y="424" class="small">查公开网页、新闻、政策、外部资料</text>
+  <text x="118" y="454" class="small">返回给主智能体做最终整理</text>
+
+  <rect x="430" y="324" width="260" height="164" class="box" fill="#fff7e8" stroke="#d8921f"/>
+  <text x="472" y="364" class="label">数据库查询助手</text>
+  <text x="472" y="396" class="body">工具：list_sql_tables</text>
+  <text x="472" y="424" class="body">工具：get_table_data</text>
+  <text x="472" y="452" class="body">工具：execute_sql_query</text>
+
+  <rect x="784" y="324" width="260" height="164" class="box" fill="#ecfeff" stroke="#0891b2"/>
+  <text x="826" y="364" class="label">RAGFlow 助手</text>
+  <text x="826" y="396" class="body">工具：get_assistant_list</text>
+  <text x="826" y="424" class="body">工具：create_ask_delete</text>
+  <text x="826" y="454" class="small">查内部知识库、制度、资料文档</text>
+
+  <rect x="398" y="548" width="324" height="88" class="box" fill="#ffffff" stroke="#b6c2d2"/>
+  <text x="452" y="584" class="label">主智能体文件工具</text>
+  <text x="438" y="614" class="body">read_file_content / generate_markdown / convert_md_to_pdf</text>
+
+  <path d="M 500 238 C 410 280 300 300 206 324" class="line"/>
+  <path d="M 560 238 L 560 324" class="line"/>
+  <path d="M 620 238 C 712 280 820 300 914 324" class="line"/>
+  <path d="M 560 238 L 560 548" class="line"/>
+
+  <rect x="302" y="258" width="516" height="44" rx="10" ry="10" fill="#ffffff" stroke="#cbd5e1"/>
+  <text x="330" y="286" class="small">选择依据：公开信息找网络，结构化数据找 MySQL，内部非结构化文档找 RAGFlow。</text>
+</svg>
