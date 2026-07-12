@@ -44,9 +44,9 @@ from dotenv import load_dotenv  # 从 .env 文件加载环境变量，避免把 
 load_dotenv(encoding="utf-8")  # encoding 指定 utf-8，避免 .env 中中文注释乱码
 
 llm = ChatOpenAI(
-    model="deepseek-v3.2",  # 模型名需与阿里百炼「模型广场」中的调用名一致
-    api_key=os.getenv("QWEN_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",  # 阿里百炼 OpenAI 兼容接口地址
+    model="deepseek-v4-flash",
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com",
 )
 
 # ========== 2. 调用大模型并打印结果 ==========

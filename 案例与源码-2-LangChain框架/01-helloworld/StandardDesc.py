@@ -16,10 +16,12 @@
 # ========== 1. 导入与环境 ==========
 # 下面每一行都是「把别人写好的功能拿进来」，后面才能用。
 
-from langchain_openai import (
-    ChatOpenAI,
-)  # 用 OpenAI 兼容接口和模型对话（阿里云等也兼容这个接口）
+# from langchain_openai import (
+#     ChatOpenAI,
+# )  # 用 OpenAI 兼容接口和模型对话（阿里云等也兼容这个接口）
 import os  # Python 自带：用来读「环境变量」（如 API 密钥）
+from langchain.chat_models import init_chat_model
+from langchain_core.language_models.chat_models import BaseChatModel
 
 # load_dotenv：从项目根目录的 .env 文件里，把变量加载到「环境」里，之后用 os.getenv("变量名") 就能读到。
 # 把密钥写在 .env 里而不是代码里，既安全（不把密钥提交到 Git），又方便换环境（开发/生产用不同 .env）。
@@ -49,7 +51,7 @@ logger = logging.getLogger(__name__)  # 当前模块的 logger，后面用 logge
 # 「LLM」= 大语言模型（如通义千问、DeepSeek）。这里把「创建可对话的客户端」封装成一个函数，以后在别处也能直接调 init_llm_client()，不用重复写一长串配置。
 
 
-def init_llm_client() -> ChatOpenAI:
+def init_llm_client() -> BaseChatModel:
     """
     初始化 LLM 客户端（封装成函数，提高复用性）。
 
@@ -57,15 +59,17 @@ def init_llm_client() -> ChatOpenAI:
         ChatOpenAI: 初始化好的「对话客户端」，可以对其调用 .invoke(问题) 或 .stream(问题)。
     """
     # 从环境变量里拿 API 密钥；没配置的话直接报错，提示去检查 .env。
-    api_key = os.getenv("QWEN_API_KEY")
+    api_key = os.getenv("DEEPSEEK_API_KEY")
     if not api_key:
-        raise ValueError("环境变量 QWEN_API_KEY 未配置，请检查 .env 文件")
+        raise ValueError("环境变量 DEEPSEEK_API_KEY 未配置，请检查 .env 文件")
 
     # 创建客户端：指定用哪个模型、密钥、接口地址，以及「回复风格」相关参数。
-    llm = ChatOpenAI(
-        model="deepseek-v3.2",  # 模型名称（这里演示的是“DeepSeek 模型 + 阿里百炼兼容接口”）
-        api_key=api_key,
-        base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",  # 阿里云提供的兼容 OpenAI 的地址
+    llm = init_chat_model(
+        model="deepseek-v4-flash",
+        model_provider="openai",
+        api_key=os.getenv("DEEPSEEK_API_KEY"),
+        base_url="https://api.deepseek.com",
+        # reasoning_effort="max",
         temperature=0.7,  # 控制「随机程度」：0 更确定、重复性高；1 更随机、更有创意。一般 0.5～0.8 即可。
         max_tokens=2048,  # 单次回复最多生成多少个 token（约等于字数），防止回复过长或超限。
     )
@@ -85,7 +89,7 @@ def main():
 
         # ----- 方式一：invoke（一次性拿完整回复） -----
         # 发一个问题，程序会等模型全部答完，再一次性把 response 给你。适合短问答。
-        question = "你是谁"
+        question = "Tansformer原论文是哪一篇"
         response = llm.invoke(question)
         logger.info(f"问题：{question}")
         logger.info(f"回答：{response.content}")  # .content 里是模型的纯文字回复
@@ -94,7 +98,7 @@ def main():
         # 模型边想边返回，每次返回一小段（chunk），用 for 循环一段段打印，就像打字机效果。适合长文或需要「实时看到输出」的场景。
         print("==================== 以下是流式输出（另一种调用方式）")
         print("*" * 50)
-        response_stream = llm.stream("介绍下 langchain，300字以内")
+        response_stream = llm.stream("介绍下 langchain，1000字")
         for chunk in response_stream:
             print(chunk.content, end="")  # end="" 表示不换行，紧挨着打
         print()  # 流式结束后补一个换行，避免和后续输出粘在一起

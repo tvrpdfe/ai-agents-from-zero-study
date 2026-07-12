@@ -5,7 +5,7 @@
 
 知识点速览：
 - 同一脚本可初始化多个聊天模型实例（不同 model、base_url、api_key），按场景选用或对比调用。
-- 每个实例用 init_chat_model 单独配置，变量名区分（如 llm_qwen、llm_deepseek）便于后续复用。
+- 每个实例用 init_chat_model 单独配置，变量名区分（如 llm_grok、llm_deepseek）便于后续复用。
 - 通义用 model_provider="openai" + 阿里百炼 base_url；DeepSeek 可用 model_provider="deepseek" 或兼容接口。
 
 补充说明：
@@ -23,14 +23,14 @@ load_dotenv(
 )  # 从 .env 加载，建议在 .env 中配置 QWEN_API_KEY、deepseek-api 等
 
 # ========== 2. 实例化模型一：通义/百炼（OpenAI 兼容） ==========
-llm_qwen = init_chat_model(
-    model="qwen-plus",
-    model_provider="openai",  # 阿里百炼为 OpenAI 兼容接口
-    api_key=os.getenv("QWEN_API_KEY"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+llm_grok = init_chat_model(
+    model="grok-4.5",
+    model_provider="openai",  # OpenAI 兼容接口
+    api_key=os.getenv("GROK_API_KEY"),
+    base_url="https://www.micuapi.ai/v1",
 )
 
-print(llm_qwen.invoke("你是谁").content)
+print(llm_grok.invoke("你是谁").content)
 
 print("*" * 70)
 
@@ -39,7 +39,7 @@ print("*" * 70)
 llm_deepseek = init_chat_model(
     model="deepseek-v4-flash",  # 复杂推理或高质量生成可改用 deepseek-v4-pro
     model_provider="deepseek",  # 这里走的是 DeepSeek 官方 provider，而不是阿里百炼兼容端点
-    api_key=os.getenv("deepseek-api"),  # .env 中配置 DeepSeek API Key
+    api_key=os.getenv("DEEPSEEK_API_KEY"),  # .env 中配置 DeepSeek API Key
     base_url="https://api.deepseek.com",
 )
 
