@@ -15,6 +15,7 @@ template1 = (
     PromptTemplate.from_template("请用一句话介绍{topic}，要求通俗易懂\n")
     + "内容不超过{length}个字"
 )
+
 prompt1 = template1.format(topic="LangChain", length=100)
 print(prompt1)
 

@@ -33,7 +33,9 @@ print()
 prompt_value2 = chat_prompt.invoke(
     {"role": "python开发工程师", "question": "堆排序怎么写"}
 )
+print(prompt_value2)
 print(prompt_value2.to_string())
+print(prompt_value2.to_messages())
 
 print()
 

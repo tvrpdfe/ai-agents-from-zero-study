@@ -12,11 +12,14 @@
 from langchain_core.prompts import ChatPromptTemplate
 
 # 用「(role, content) 元组」的列表定义对话：system、human、ai、再一条 human（带占位符）
-chatPromptTemplate = ChatPromptTemplate(
+# chatPromptTemplate = ChatPromptTemplate(
+chatPromptTemplate = ChatPromptTemplate.from_messages(
     [
         ("system", "你是一个AI开发工程师，你的名字是{name}。"),
         ("human", "你能帮我做什么?"),
         ("ai", "我能开发很多{thing}。"),
+        ("user", "你能帮我做什么?"),
+        ("assistant", "我能开发很多{thing}。"),
         ("human", "{user_input}"),
     ]
 )

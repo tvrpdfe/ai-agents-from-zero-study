@@ -29,18 +29,27 @@ prompt = ChatPromptTemplate.from_messages(
 
 # invoke 时传入：memory = 历史消息列表，question = 当前问题
 # 这里用两条消息模拟「上一轮」的对话，再问「我的名字叫什么」来测试模型是否利用上下文
-prompt_value = prompt.invoke(
-    {
-        "memory": [
-            HumanMessage("我的名字叫亮仔，是一名程序员111"),
-            AIMessage("好的，亮仔你好222"),
-        ],
-        "question": "请问我的名字叫什么？",
-    }
+# prompt_value = prompt.invoke(
+#     {
+#         "memory": [
+#             HumanMessage("我的名字叫亮仔，是一名程序员111"),
+#             AIMessage("好的，亮仔你好222"),
+#         ],
+#         "question": "请问我的名字叫什么？",
+#     }
+# )
+
+prompt_value = prompt.format_messages(
+    memory=[
+        HumanMessage("我的名字叫亮仔，是一名程序员111"),
+        AIMessage("好的，亮仔你好222"),
+    ],
+    question="请问我的名字叫什么？",
 )
 
 # 把整段 prompt 转成字符串查看（系统设定 + 历史 + 当前问题）
-print(prompt_value.to_string())
+# print(prompt_value.to_string())
+print(prompt_value)
 
 """
 【输出示例】

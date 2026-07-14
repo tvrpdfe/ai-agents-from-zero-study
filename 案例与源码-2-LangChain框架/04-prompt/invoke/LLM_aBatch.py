@@ -13,6 +13,7 @@ import os
 import asyncio
 from dotenv import load_dotenv
 from langchain.chat_models import init_chat_model
+from langchain_core.messages import HumanMessage, SystemMessage
 
 # abatch 本示例用「字符串列表」作为输入，无需单独导入 Message 类型
 
@@ -20,17 +21,28 @@ load_dotenv()
 
 # ---------- 1. 实例化模型 ----------
 model = init_chat_model(
-    model="qwen-plus",
+    model="deepseek-v4-flash",
     model_provider="openai",
-    api_key=os.getenv("aliQwen-api"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com",
 )
 
 # ---------- 2. 准备批量问题（与同步 batch 相同）----------
 questions = [
-    "什么是redis?简洁回答，字数控制在100以内",
-    "Python的生成器是做什么的？简洁回答，字数控制在100以内",
-    "解释一下Docker和Kubernetes的关系?简洁回答，字数控制在100以内",
+    [
+        SystemMessage(content="你是一个专业的助手。"),
+        HumanMessage(content="什么是redis?简洁回答，字数控制在100以内"),
+    ],
+    [
+        SystemMessage(content="你是一个专业的助手。"),
+        HumanMessage(content="Python的生成器是做什么的？简洁回答，字数控制在100以内"),
+    ],
+    [
+        SystemMessage(content="你是一个专业的助手。"),
+        HumanMessage(
+            content="解释一下Docker和Kubernetes的关系?简洁回答，字数控制在100以内"
+        ),
+    ],
 ]
 
 
@@ -41,7 +53,7 @@ async def async_batch_call():
     print(f"响应类型：{type(response)}")
 
     for q, r in zip(questions, response):
-        print(f"问题：{q}\n回答：{r.content}\n")
+        print(f"问题：{q[1].content}\n回答：{r.content}\n")
 
 
 # ---------- 4. 运行异步函数 ----------

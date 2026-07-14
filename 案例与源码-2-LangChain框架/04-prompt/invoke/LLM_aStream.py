@@ -19,16 +19,16 @@ load_dotenv()
 
 # ---------- 1. 实例化模型 ----------
 model = init_chat_model(
-    model="qwen-plus",
+    model="deepseek-v4-flash",
     model_provider="openai",
-    api_key=os.getenv("aliQwen-api"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com",
 )
 
 # ---------- 2. 构建多角色消息 ----------
 messages = [
-    SystemMessage(content="你叫小问，是一个乐于助人的AI人工助手"),
-    HumanMessage(content="你是谁"),
+    SystemMessage(content="你是一个获奖无数的作家"),
+    HumanMessage(content="写一篇800字左右的黑暗童话"),
 ]
 
 

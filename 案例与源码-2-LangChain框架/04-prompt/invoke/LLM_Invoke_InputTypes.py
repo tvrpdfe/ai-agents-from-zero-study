@@ -16,14 +16,15 @@ import os
 from dotenv import load_dotenv
 from langchain.chat_models import init_chat_model
 from langchain_core.messages import HumanMessage, SystemMessage
+from langchain_core.prompts import PromptTemplate
 
 load_dotenv()
 
 model = init_chat_model(
-    model="qwen-plus",
+    model="deepseek-v4-flash",
     model_provider="openai",
-    api_key=os.getenv("aliQwen-api"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com",
 )
 
 
@@ -31,7 +32,19 @@ def demo_message_objects():
     """推荐：显式 Message 对象，角色与字段最清晰。"""
     messages = [
         SystemMessage(content="你是一个专业的数学助手，回答要简短。"),
-        HumanMessage(content="你好，你是谁？"),
+        HumanMessage(content="付同样钱买铅笔，李军13支，张强7支，李军补0.6元。求单价"),
+    ]
+    resp = model.invoke(messages)
+    print(type(resp), resp.content[:80] if resp.content else "")
+
+
+def demo_message_template_objects():
+    """模板 + 显式 Message 对象。"""
+    template = PromptTemplate.from_template("用不超过 50 字介绍：{topic} 是什么？")
+    prompt_str = template.format(topic="LangChain")
+    messages = [
+        SystemMessage(content="你是一个专业的数学助手，回答要简短。"),
+        HumanMessage(content=prompt_str),
     ]
     resp = model.invoke(messages)
     print(type(resp), resp.content[:80] if resp.content else "")
@@ -41,7 +54,7 @@ def demo_tuple_list():
     """元组列表：与 ChatPromptTemplate.from_messages 的写法一致。"""
     messages = [
         ("system", "你是一个专业的数学助手，回答要简短。"),
-        ("human", "你好，你是谁？"),
+        ("human", "付同样钱买铅笔，李军13支，张强7支，李军补0.6元。求单价"),
     ]
     resp = model.invoke(messages)
     print(type(resp), resp.content[:80] if resp.content else "")
@@ -51,7 +64,10 @@ def demo_dict_list():
     """字典列表：与 OpenAI Chat Completions 等 API 的请求体形状接近。"""
     messages = [
         {"role": "system", "content": "你是一个专业的数学助手，回答要简短。"},
-        {"role": "user", "content": "你好，你是谁？"},
+        {
+            "role": "user",
+            "content": "付同样钱买铅笔，李军13支，张强7支，李军补0.6元。求单价",
+        },
     ]
     resp = model.invoke(messages)
     print(type(resp), resp.content[:80] if resp.content else "")
@@ -66,6 +82,7 @@ async def demo_ainvoke_tuple():
 if __name__ == "__main__":
     print("--- Message 对象列表 ---")
     demo_message_objects()
+    demo_message_template_objects()
     print("--- 元组列表 ---")
     demo_tuple_list()
     print("--- 字典列表 ---")
