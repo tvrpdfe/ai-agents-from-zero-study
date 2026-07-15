@@ -23,10 +23,10 @@ from langchain.chat_models import init_chat_model
 load_dotenv(encoding="utf-8")
 
 llm = init_chat_model(
-    model="qwen-plus",
-    model_provider="openai",
-    api_key=os.getenv("aliQwen-api"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    model="grok-4.5",
+    model_provider="openai",  # OpenAI 兼容接口
+    api_key=os.getenv("GROK_API_KEY"),
+    base_url="https://www.micuapi.ai/v1",
 )
 
 
@@ -55,4 +55,3 @@ print(
 【输出示例】
 {'animals': [{'animal': '狗', 'emoji': '🐶'}, {'animal': '猫', 'emoji': '🐱'}, {'animal': '鸟', 'emoji': '🐦'}]}
 """
-

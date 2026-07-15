@@ -36,6 +36,7 @@ parser = JsonOutputParser(pydantic_object=Person)
 
 # 获取「格式说明」：描述 Person 各字段，便于拼进提示词让模型按此输出
 format_instructions = parser.get_format_instructions()
+logger.info(f"格式说明:\n{format_instructions}")
 
 # 在 human 消息里加入 {format_instructions}，模型会看到「请按如下格式输出 JSON …」
 chat_prompt = ChatPromptTemplate.from_messages(
@@ -47,15 +48,15 @@ chat_prompt = ChatPromptTemplate.from_messages(
 
 # 填 topic 和 format_instructions，得到消息列表
 prompt = chat_prompt.format_messages(
-    topic="小米su7跑车", format_instructions=format_instructions
+    topic="肯尼迪", format_instructions=format_instructions
 )
 logger.info(prompt)
 
 model = init_chat_model(
-    model="qwen-plus",
+    model="deepseek-v4-flash",
     model_provider="openai",
-    api_key=os.getenv("aliQwen-api"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com",
 )
 
 result = model.invoke(prompt)

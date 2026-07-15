@@ -39,10 +39,10 @@ prompt = chat_prompt.invoke(
 logger.info(prompt)
 
 model = init_chat_model(
-    model="qwen-plus",
+    model="deepseek-v4-flash",
     model_provider="openai",
-    api_key=os.getenv("aliQwen-api"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com",
 )
 
 # 模型返回的可能是带 JSON 的文本
@@ -72,4 +72,3 @@ content='{"q": "什么是LangChain，简洁回答100字以内", "a": "LangChain�
 """
 
 # 2026-02-26 12:00:56.501 | INFO     | __main__:<module>:50 - 结果类型: <class 'dict'>
-
