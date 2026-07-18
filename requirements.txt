@@ -38,6 +38,9 @@ redis>=5.3,<6
 # ---------- 向量库 Redis（10-rag 中 RedisVectorStore.py、RedisVectorStore_SimilaritySearch.py 需此依赖，需 Python 3.10–3.13） ----------
 langchain-redis>=0.2
 
+# ---------- 向量数据库 Qdrant（实战项目-电商问数中 AsyncQdrantClient 用于 Embedding 向量存储与相似度检索） ----------
+qdrant-client>=1.17.1
+
 # ---------- RAG 文档加载（10-rag：PDF 需 pypdf，Word 需 unstructured+python-docx 或 docx2txt，Markdown 需 markdown，JSON 需 jq） ----------
 pypdf>=4.0
 unstructured>=0.10
