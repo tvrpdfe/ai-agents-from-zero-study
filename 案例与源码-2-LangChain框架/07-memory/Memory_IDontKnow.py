@@ -20,11 +20,10 @@ import os
 
 # 大模型与简单链：仅「提示模板 → 模型 → 解析器」，无任何记忆组件
 llm = init_chat_model(
-    model="qwen-plus",
+    model="deepseek-v4-flash",
     model_provider="openai",
-    api_key=os.getenv("aliQwen-api"),
-    temperature=0.0,
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com",
 )
 prompt = PromptTemplate.from_template("请回答我的问题：{question}")
 parser = StrOutputParser()
