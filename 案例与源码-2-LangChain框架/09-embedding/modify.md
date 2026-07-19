@@ -95,39 +95,7 @@ print(len(doc_vecs), len(doc_vecs[0]))
 
 迁移时通常只需改 **创建 `embeddings` 对象** 的那几行；后面的检索器、向量库、相似度计算可以不动。
 
-## 5. 扩展示例：余弦相似度
-
-拿到向量后，语义是否接近可以用余弦相似度衡量（值约在 `[-1, 1]`，越接近 1 越相似）：
-
-\[
-\cos\theta = \frac{A\cdot B}{|A|\,|B|}
-\]
-
-```python
-import numpy as np
-
-def cosine_similarity(vec1, vec2):
-    return float(np.dot(vec1, vec2) / (np.linalg.norm(vec1) * np.linalg.norm(vec2)))
-
-texts = [
-    "我喜欢吃苹果",
-    "苹果是我最喜欢吃的水果",
-    "我喜欢用苹果手机",
-]
-vecs = embeddings.embed_documents(texts)
-
-for i in range(len(texts)):
-    for j in range(i + 1, len(texts)):
-        score = cosine_similarity(vecs[i], vecs[j])
-        print(f"{texts[i]}  vs  {texts[j]}  ->  {score:.4f}")
-```
-
-说明：
-
-- 若已 `normalize_embeddings=True`，余弦相似度在数值上等价于点积；手写完整公式更利于对照教材。
-- 合理预期：语义更近的句子对应更高分数（例如都谈「吃苹果」的一对，通常高于「水果 vs 手机」）。
-
-## 6. 从其它后端迁移的通用步骤
+## 5. 从其它后端迁移的通用步骤
 
 1. **确认依赖**：安装 `langchain-huggingface`、`sentence-transformers`、`torch`
 2. **替换客户端创建逻辑**：删除原云 API Key / base_url / SDK 调用，改为上一节的 `HuggingFaceEmbeddings(...)`
@@ -136,7 +104,7 @@ for i in range(len(texts)):
 5. **设备与性能**：先 CPU 跑通，再按机器条件考虑 GPU / 服务化
 6. **缓存与网络**：首次下载模型；之后可离线加载（需保证 cache 仍在）
 
-## 7. 常见现象
+## 6. 常见现象
 
 | 现象 | 说明 |
 |------|------|
@@ -145,7 +113,7 @@ for i in range(len(texts)):
 | 速度慢 | CPU 推理或首次下载；可考虑 GPU、批量 `embed_documents`、服务化部署 |
 | 与旧云模型分数对不上 | 不同模型向量空间不同，只比较**同一模型**下的相对关系 |
 
-## 8. 参考链接
+## 7. 参考链接
 
 - 模型卡片：https://huggingface.co/BAAI/bge-m3
 - LangChain HuggingFace 集成：以当前安装的 `langchain-huggingface` 文档为准
