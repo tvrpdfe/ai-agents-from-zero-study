@@ -26,6 +26,11 @@ langchain-ollama>=0.2
 # ---------- 通义千问原生 API（02-models_io/ModelIO_Qwen.py 使用 ChatTongyi 时需装） ----------
 dashscope>=1.0
 
+# ---------- 本地 Embedding（09-embedding 中 BGE-M3 等 HuggingFace 模型；Windows 默认 CPU 版 torch） ----------
+langchain-huggingface>=0.1
+sentence-transformers>=3.0
+torch>=2.0
+
 # ---------- 输出解析与日志（05_parser 等） ----------
 loguru>=0.7
 
@@ -38,8 +43,9 @@ redis>=5.3,<6
 # ---------- 向量库 Redis（10-rag 中 RedisVectorStore.py、RedisVectorStore_SimilaritySearch.py 需此依赖，需 Python 3.10–3.13） ----------
 langchain-redis>=0.2
 
-# ---------- 向量数据库 Qdrant（实战项目-电商问数中 AsyncQdrantClient 用于 Embedding 向量存储与相似度检索） ----------
+# ---------- 向量数据库 Qdrant（实战项目-电商问数中 AsyncQdrantClient；09-embedding/EmbeddingStoreQdrant.py 用 langchain-qdrant） ----------
 qdrant-client>=1.17.1
+langchain-qdrant>=0.2
 
 # ---------- RAG 文档加载（10-rag：PDF 需 pypdf，Word 需 unstructured+python-docx 或 docx2txt，Markdown 需 markdown，JSON 需 jq） ----------
 pypdf>=4.0

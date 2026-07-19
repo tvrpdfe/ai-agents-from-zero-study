@@ -22,9 +22,10 @@ from QueryWeatherTool import get_weather
 
 # 初始化大模型（教程 5.4：需可调用工具的大模型）
 llm = ChatOpenAI(
-    model="qwen-plus",
-    api_key=os.getenv("aliQwen-api"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    model="deepseek-v4-flash",
+    model_provider="openai",
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com",
 )
 
 # 将工具绑定到模型：请求时会把 get_weather 的名称、描述、参数 schema 发给模型，模型随后可能返回 tool_calls
