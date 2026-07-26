@@ -44,17 +44,17 @@ COLLECTION_NAME = "rag_alibaba_java"
 
 # 大模型：用于最终根据「检索到的上下文 + 用户问题」生成回答
 # 需在 .env 中配置 aliQwen-api（DashScope 兼容模式）
-_api_key = os.getenv("aliQwen-api")
+_api_key = os.getenv("DEEPSEEK_API_KEY")
 if not _api_key:
     raise SystemExit(
         "缺少环境变量 aliQwen-api。请在项目根目录 .env 中配置后再运行本脚本。"
     )
 
 llm = init_chat_model(
-    model="qwen-plus",
+    model="deepseek-v4-flash",
     model_provider="openai",
-    api_key=_api_key,
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com",
 )
 
 # 提示词模板：{context} 由检索器填充，{question} 由用户输入填充；最终会生成一段字符串 Prompt 再交给聊天模型
