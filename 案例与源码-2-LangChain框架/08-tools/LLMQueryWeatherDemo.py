@@ -23,7 +23,6 @@ from QueryWeatherTool import get_weather
 # 初始化大模型（教程 5.4：需可调用工具的大模型）
 llm = ChatOpenAI(
     model="deepseek-v4-flash",
-    model_provider="openai",
     api_key=os.getenv("DEEPSEEK_API_KEY"),
     base_url="https://api.deepseek.com",
 )
@@ -39,8 +38,8 @@ get_weather_chain = llm_with_tools | parser | get_weather
 
 # 输出链：把天气 JSON 塞进提示词，由模型转成更适合用户阅读的自然语言描述
 output_prompt = PromptTemplate.from_template(
-    """你将收到一段 JSON 格式的天气数据{weather_json}，请用简洁自然的方式将其转述给用户。
-    以下是天气 JSON 数据：
+    """你将收到一段 JSON 格式的天气数据，请用简洁自然的方式将其转述给用户。
+    以下是天气 JSON 数据：{weather_json}
     请将其转换为中文天气描述，例如：
     "北京现在天气：多云，气温 28℃，体感有点闷热（约 32℃），湿度 75%，微风（东南风 2 米/秒），
     能见度很好，大约 10 公里。建议穿短袖短裤。适合做户外运动。"
