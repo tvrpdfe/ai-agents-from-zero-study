@@ -107,9 +107,9 @@ def check_inventory(product_id: str) -> str:
 
 
 model = ChatOpenAI(
-    model="qwen-plus",
-    api_key=os.getenv("aliQwen-api"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    model="grok-4.5",
+    api_key=os.getenv("GROK_API_KEY"),
+    base_url="https://www.micuapi.ai/v1",
 )
 
 # 系统提示中明确 ReAct：先推理、再选工具、基于结果继续推理直至得到完整答案

@@ -29,9 +29,9 @@ load_dotenv()
 
 # ===================== 大模型与输出解析 =====================
 llm = ChatOpenAI(
-    model="qwen-plus",
-    api_key=os.getenv("aliQwen-api"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    model="grok-4.5",
+    api_key=os.getenv("GROK_API_KEY"),
+    base_url="https://www.micuapi.ai/v1",
 )
 output_parser = StrOutputParser()
 

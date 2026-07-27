@@ -1,23 +1,22 @@
 """
-【案例】基于 mcp.json + LangChain Agent 的 MCP 客户端（LLM + MCP 工具）
+【案例】基于 mcp.json + LangChain 1.x Agent 的 MCP 客户端（LLM + MCP 工具）
 
 对应教程章节：
 - 第 20 章 - MCP 模型上下文协议 → 6、案例实战：本地 MCP 天气服务与客户端
-- 第 21 章 - Agent 智能体 → 5、实操与案例（5.4 Agent + MCP）
+- 第 21 章 - Agent 智能体 → 4、Agent 工作原理（V1.0） / 5、实操与案例（5.4 Agent + MCP）
 
 知识点速览：
-- 从同目录的 mcp.json 加载 MCP 服务配置，使用 langchain_mcp_adapters 的 MultiServerMCPClient 连接多台
-  MCP 服务器并获取工具列表，再交给 LangChain 的 create_tool_calling_agent + AgentExecutor，形成
-  「LLM + MCP 工具」的对话 Agent。这也是第 21 章里“外部工具接入 Agent”的代表案例。
-- mcp.json 是“客户端侧的连接配置约定”，不是 MCP 协议本身。它描述的是“有哪些服务、分别怎么连”，
-  例如本仓库里既有网络方式的 weather 服务，也有 stdio 方式的 fetch 服务。
-- 流程：加载 mcp.json → 初始化 MultiServerMCPClient → 异步获取 MCP Tools → 创建 DeepSeek 模型与
-  提示模板 → 组装 Agent 与 AgentExecutor → 启动命令行聊天循环（输入 quit 退出）。
-- 本案例重点展示“把 MCP Tools 交给 LangChain Agent”；Resources 和 Prompts 虽然也是 MCP 能力，
-  但这里没有作为主线展开。
-- 这个文件延续了仓库里更容易教学的 classic Agent 路线；如果改走更偏 1.x 的直接路线，也常见
-  `await client.get_tools()` 之后把工具交给 `create_agent`，再配合 `ainvoke()` / `astream()` 使用。
-- 依赖：pip install langchain-mcp-adapters langchain-openai langchain-classic loguru；部分适配器要求 Python 3.12 及以下。需配置环境变量 DEEPSEEK_API_KEY（兼容旧名 deepseek-api）。
+- 与同目录 McpClientAgent.py（classic / 0.x 路线）对照：MCP 配置加载、MultiServerMCPClient、
+  get_tools 完全相同；差异只在「把工具交给 Agent」这一段。
+- 1.x 路线：`await client.get_tools()` 之后交给 `langchain.agents.create_agent`，
+  再配合 `ainvoke()` / `astream()` 使用，不再手写 ChatPromptTemplate、
+  create_tool_calling_agent、AgentExecutor，也不再需要 agent_scratchpad。
+- 输入/输出形态变化：
+  - 输入：`{"messages": [{"role": "user", "content": ...}]}`（不再用 `{"input": ...}`）
+  - 输出：从 `result["messages"][-1].content` 取最终回答（不再用 `result["output"]`）
+- MCP 工具多为异步，本文件统一用 `await agent.ainvoke(...)`。
+- 依赖：pip install langchain langchain-mcp-adapters langchain-openai loguru；
+  部分适配器要求 Python 3.12 及以下。需配置环境变量 DEEPSEEK_API_KEY（兼容旧名 deepseek-api）。
 - 运行前：先启动本目录 McpServerWeatherByFastMCP.py；fetch 服务用当前 conda 的
   `python -m mcp_server_fetch`（需 pip install mcp-server-fetch）。Windows + conda + Git Bash
   下若 SSL_CERT_FILE 指向错误路径，本文件会自动修正。
@@ -141,16 +140,15 @@ def _preflight_servers(servers: dict) -> dict:
                         f"可在已激活的 conda 环境中执行: pip install {module_name.replace('_', '-')}"
                     )
                     continue
-        elif (
-            transport in {"sse", "http", "streamable_http", "streamable-http"}
-            or "url" in conf
-        ):
+        elif transport in {"sse", "http", "streamable_http", "streamable-http"} or "url" in conf:
             url = conf.get("url")
             if not url:
                 logger.warning(f"跳过服务 {name}: 缺少 url")
                 continue
         else:
-            logger.warning(f"服务 {name} 未识别 transport={transport!r}，仍尝试连接")
+            logger.warning(
+                f"服务 {name} 未识别 transport={transport!r}，仍尝试连接"
+            )
 
         usable[name] = conf
 
@@ -171,7 +169,9 @@ async def _load_tools_best_effort(servers: dict):
             client = MultiServerMCPClient(connections={name: conf})
             server_tools = await client.get_tools()
             tools.extend(server_tools)
-            logger.info(f"服务 {name} 已连接，工具: {[t.name for t in server_tools]}")
+            logger.info(
+                f"服务 {name} 已连接，工具: {[t.name for t in server_tools]}"
+            )
         except Exception as exc:
             failed.append(name)
             hint = ""
@@ -195,11 +195,32 @@ async def _load_tools_best_effort(servers: dict):
     return tools
 
 
+def _final_answer(messages) -> str:
+    """从 1.x Agent 返回的 messages 中取出最终文本回答。"""
+    if not messages:
+        return ""
+    last = messages[-1]
+    content = getattr(last, "content", last)
+    if isinstance(content, list):
+        # 部分模型会返回多段 content block
+        parts = []
+        for block in content:
+            if isinstance(block, str):
+                parts.append(block)
+            elif isinstance(block, dict) and block.get("type") == "text":
+                parts.append(block.get("text", ""))
+            else:
+                parts.append(str(block))
+        return "".join(parts)
+    return str(content) if content is not None else ""
+
+
 async def run_chat_loop(config_path: str | Path | None = None) -> None:
     """
-    启动并运行一个基于 MCP 工具的聊天 Agent 循环。
+    启动并运行一个基于 MCP 工具的聊天 Agent 循环（LangChain 1.x / create_agent）。
+
     该函数会：1）加载 MCP 服务器配置；2）初始化 MCP 客户端并获取工具；
-    3）创建基于 DeepSeek 的语言模型和 Agent；4）启动命令行聊天循环；5）退出时清理资源。
+    3）用 create_agent 创建基于 DeepSeek 的 Agent；4）启动命令行聊天循环。
     """
     _fix_ssl_cert_file()
 
@@ -215,15 +236,17 @@ async def run_chat_loop(config_path: str | Path | None = None) -> None:
 
         if importlib.util.find_spec("langchain_mcp_adapters") is None:
             raise ImportError("No module named 'langchain_mcp_adapters'")
+        if importlib.util.find_spec("langchain.agents") is None:
+            raise ImportError("No module named 'langchain.agents'")
     except ImportError as e:
         logger.error(
-            "请先安装 langchain-mcp-adapters: pip install langchain-mcp-adapters（部分环境需 Python 3.12 及以下）"
+            "请先安装依赖: pip install langchain langchain-mcp-adapters langchain-openai"
+            "（部分环境需 Python 3.12 及以下）"
         )
         raise e
 
+    from langchain.agents import create_agent
     from langchain_openai import ChatOpenAI
-    from langchain_classic.agents import AgentExecutor, create_tool_calling_agent
-    from langchain_core.prompts import ChatPromptTemplate, MessagesPlaceholder
 
     config = load_servers(config_path)
     servers = config.get("mcpServers", {})
@@ -260,31 +283,20 @@ async def run_chat_loop(config_path: str | Path | None = None) -> None:
         )
         return
 
-    # 语言模型（DeepSeek，与截图一致；可改为其他 OpenAI 兼容接口）
     llm = ChatOpenAI(
         model="deepseek-v4-flash",
         api_key=api_key,
         base_url="https://api.deepseek.com",
     )
 
-    # 对话提示：系统提示要求使用工具完成用户请求，agent_scratchpad 供 Executor 填入中间步骤
-    prompt = ChatPromptTemplate.from_messages(
-        [
-            ("system", "你是一个有用的助手，需要使用提供的工具来完成用户请求。"),
-            ("human", "{input}"),
-            MessagesPlaceholder(variable_name="agent_scratchpad"),
-        ]
-    )
-
-    agent = create_tool_calling_agent(llm, tools, prompt)
-    agent_executor = AgentExecutor(
-        agent=agent,
+    # 1.x：一步创建 Agent；system_prompt 替代 ChatPromptTemplate + agent_scratchpad
+    agent = create_agent(
+        model=llm,
         tools=tools,
-        verbose=True,
-        handle_parsing_errors="解析用户请求失败，请重新输入清晰的指令",
+        system_prompt="你是一个有用的助手，需要使用提供的工具来完成用户请求。",
     )
 
-    logger.info("\n MCP Agent 已启动，请先输入一个提问给(LLM+MCP)，输入 'quit' 退出")
+    logger.info("\n MCP Agent (LangChain 1.x) 已启动，请先输入一个提问给(LLM+MCP)，输入 'quit' 退出")
 
     while True:
         try:
@@ -294,8 +306,12 @@ async def run_chat_loop(config_path: str | Path | None = None) -> None:
             if user_input.lower() == "quit":
                 logger.info("已退出")
                 break
-            result = agent_executor.invoke({"input": user_input})
-            output = result.get("output", result)
+
+            # 1.x 标准输入是 messages；MCP 工具多为 async，用 ainvoke
+            result = await agent.ainvoke(
+                {"messages": [{"role": "user", "content": user_input}]}
+            )
+            output = _final_answer(result.get("messages", []))
             print(f"\nAgent: {output}")
         except KeyboardInterrupt:
             logger.info("已退出")
