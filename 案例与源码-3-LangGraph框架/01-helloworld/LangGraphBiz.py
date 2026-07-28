@@ -13,6 +13,8 @@
 
 from langgraph.constants import START, END
 from langgraph.graph import StateGraph
+import os
+import uuid
 
 
 def addition(state):
@@ -53,8 +55,14 @@ print(f"最后的结果是:{result}")
 print(app.get_graph().print_ascii())
 print()
 # 打印图的可视化结构，生成更加美观的Mermaid 代码，通过processon 编辑器查看
-print(app.get_graph().draw_mermaid())
-
+# print(app.get_graph().draw_mermaid())
+png_bytes = app.get_graph().draw_mermaid_png(max_retries=2, retry_delay=2.0)
+output_path = os.path.join(
+    os.path.dirname(__file__), "langgraph" + str(uuid.uuid4())[:8] + ".png"
+)
+with open(output_path, "wb") as f:
+    f.write(png_bytes)
+print(f"图片已生成：{output_path}")
 """
 【输出示例】
 {('subtraction', '__end__'), ('addition', 'subtraction'), ('__start__', 'addition')}

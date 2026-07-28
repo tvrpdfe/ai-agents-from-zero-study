@@ -14,6 +14,7 @@
 
 import json
 import os
+import uuid
 from typing import Annotated, List, TypedDict
 from langgraph.graph import StateGraph, START, END
 from langgraph.graph.message import add_messages
@@ -35,10 +36,10 @@ class DiliState(TypedDict):
 
 # 2. 初始化大模型（与第 10 章调用方式一致）
 llm = init_chat_model(
-    model="qwen-plus",
+    model="deepseek-v4-flash",
     model_provider="openai",
-    api_key=os.getenv("aliQwen-api"),
-    base_url="https://dashscope.aliyuncs.com/compatible-mode/v1",
+    api_key=os.getenv("DEEPSEEK_API_KEY"),
+    base_url="https://api.deepseek.com",
 )
 
 
@@ -78,14 +79,16 @@ print(
 # 可视化
 print(app.get_graph().print_ascii())
 print("=" * 50)
-print(app.get_graph().draw_mermaid())
-print("=" * 50)
+# print(app.get_graph().draw_mermaid())
+# print("=" * 50)
 
-# png_bytes = app.get_graph().draw_mermaid_png()
-# output_path = "langgraph" + str(uuid.uuid4())[:8] + ".png"
-# with open(output_path, "wb") as f:
-#     f.write(png_bytes)
-# print(f"图片已生成：{output_path}")
+png_bytes = app.get_graph().draw_mermaid_png()
+output_path = os.path.join(
+    os.path.dirname(__file__), "langgraph" + str(uuid.uuid4())[:8] + ".png"
+)
+with open(output_path, "wb") as f:
+    f.write(png_bytes)
+print(f"图片已生成：{output_path}")
 
 
 """

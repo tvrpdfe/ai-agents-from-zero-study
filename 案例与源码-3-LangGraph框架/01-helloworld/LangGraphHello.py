@@ -12,9 +12,10 @@
 - 本案例虽然是线性流程，但它已经是后续“分支、循环、多节点 LLM 图”的最小雏形；第 23 章会继续展开 State Schema 和 Reducer。
 """
 
+import os
+import uuid
 from typing import TypedDict
 from langgraph.graph import StateGraph, START, END
-import uuid
 
 
 # 1. 定义 State（状态）：声明图中要传递的字段及类型（可选）
@@ -59,7 +60,9 @@ print("=" * 50)
 
 # 可选：生成 PNG 图片（依赖 mermaid.ink 或 Pyppeteer，易受网络影响）
 png_bytes = app.get_graph().draw_mermaid_png(max_retries=2, retry_delay=2.0)
-output_path = "langgraph" + str(uuid.uuid4())[:8] + ".png"
+output_path = os.path.join(
+    os.path.dirname(__file__), "langgraph" + str(uuid.uuid4())[:8] + ".png"
+)
 with open(output_path, "wb") as f:
     f.write(png_bytes)
 print(f"图片已生成：{output_path}")
