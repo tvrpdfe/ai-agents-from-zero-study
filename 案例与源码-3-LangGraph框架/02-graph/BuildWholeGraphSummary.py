@@ -13,6 +13,8 @@
 from typing import TypedDict
 from langgraph.constants import START, END
 from langgraph.graph import StateGraph
+import os
+import uuid
 
 """图的构建流程：
 1、初始化一个StateGraph实例。
@@ -34,7 +36,7 @@ def input_node(state: GraphState) -> dict:
     return {"process_data": {"input": "input_value"}}
 
 
-def process_node(state: dict) -> dict:
+def process_node(state: GraphState) -> dict:
     """处理节点：更新 process_data。"""
     print(
         f"process_node 节点执行 state.get('process_data'): {state.get('process_data')}"
@@ -71,7 +73,14 @@ print(f"最后的结果是:{result}")
 print(app.get_graph().print_ascii())
 print("=================================")
 print(app.get_graph().draw_mermaid())
-
+# 可选：生成 PNG 图片（依赖 mermaid.ink 或 Pyppeteer，易受网络影响）
+png_bytes = app.get_graph().draw_mermaid_png(max_retries=2, retry_delay=2.0)
+output_path = os.path.join(
+    os.path.dirname(__file__), "langgraph" + str(uuid.uuid4())[:8] + ".png"
+)
+with open(output_path, "wb") as f:
+    f.write(png_bytes)
+print(f"图片已生成：{output_path}")
 
 """
 【输出示例】

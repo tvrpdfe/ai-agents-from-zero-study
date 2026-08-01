@@ -41,7 +41,7 @@ def run_demo():
 
     result = graph.invoke({"messages": [("user", "Hi there!")]})
     print(f"初始状态: {{'messages': [('user', 'Hi there!')]}}")
-    print(f"执行结果: {result}\n")
+    print(f"执行结果: {result['messages']}\n")
     print("*" * 60)
     print(graph.get_graph().print_ascii())
 

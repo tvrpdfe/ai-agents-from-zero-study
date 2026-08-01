@@ -46,13 +46,13 @@ def demo_input_output_schema():
     builder = StateGraph(
         OverallState, input_schema=InputState, output_schema=OutputState
     )
-    builder.add_edge(START, "answer_node")
     builder.add_node("answer_node", answer_node)
+    builder.add_edge(START, "answer_node")
     builder.add_edge("answer_node", END)
     graph = builder.compile()
 
     # invoke 只传 InputState 的字段；返回结果仅包含 OutputState 的字段
-    result = graph.invoke({"question": "你好"})
+    result = graph.invoke({"question": "你好", "test": "aaa"})
     print(f"图调用结果: {result}")
     print(graph.get_graph().print_ascii())
     print()
