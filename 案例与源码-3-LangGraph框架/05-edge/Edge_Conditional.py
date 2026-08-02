@@ -63,7 +63,7 @@ def handle_even(state: MyState) -> MyState:
         MyState: 返回更新后的状态对象，result设置为"even"
     """
     logger.info("[handle_even] x 是偶数")
-    return MyState(x=state.x, result="even")
+    return {"x": state.x}
 
 
 # 处理奇数情况的节点函数
@@ -106,7 +106,7 @@ print(graph.get_graph().print_ascii())
 
 # 测试用例：输入偶数4
 logger.info("输入 x=4（偶数）")
-graph.invoke(MyState(x=4))
+logger.info(graph.invoke({"x": 4}))
 
 # # 测试用例：输入奇数3
 # logger.info("输入 x=3（奇数）")

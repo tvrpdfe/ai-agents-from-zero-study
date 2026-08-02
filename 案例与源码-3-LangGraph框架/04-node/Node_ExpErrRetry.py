@@ -133,8 +133,10 @@ def test_no_retry_exception():
 def run_demo():
     print("=== LangGraph 节点重试策略完整演示===")
     print("-" * 80 + "\n")
-    # test_default_retry()
-    # test_custom_retry()
+    test_default_retry()
+    print("-" * 80 + "\n")
+    test_custom_retry()
+    print("-" * 80 + "\n")
     test_no_retry_exception()
     print("-" * 80)
     print("=== 演示结束 ===")

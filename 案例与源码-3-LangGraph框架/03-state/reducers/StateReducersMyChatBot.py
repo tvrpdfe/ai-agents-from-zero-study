@@ -50,8 +50,7 @@ def run_demo():
 
     # 两节点都从 START 接入：并行分支，各自跑到 END
     builder.add_edge(START, "process")
-    builder.add_edge(START, "sentiment")
-    builder.add_edge("process", END)
+    builder.add_edge("process", "sentiment")
     builder.add_edge("sentiment", END)
 
     graph = builder.compile()
